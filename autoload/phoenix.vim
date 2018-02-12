@@ -235,46 +235,54 @@ function! phoenix#setup_custom_transformations()
   endfunction
 endfunction
 
+" TODO: Missing channel
 function! phoenix#projections() abort
   return  {
-        \  "web/controllers/*_controller.ex": {
-        \     "type": "controller",
-        \     "alternate": "test/controllers/{}_controller_test.exs",
-        \     "template": s:template_for('controller', 'Controller')
-        \  },
-        \  "web/models/*.ex": {
-        \     "type": "model",
-        \     "alternate": "test/models/{}_test.exs",
-        \     "template": s:template_for('model', 'Model')
-        \  },
-        \  "web/channels/*_channel.ex": {
-        \     "type": "channel",
-        \     "alternate": "test/channels/{}_channel_test.exs",
-        \     "template": s:template_for('channel', 'Channel')
-        \  },
-        \  "web/views/*_view.ex": {
-        \     "type": "view",
-        \     "alternate": "test/views/{}_view_test.exs",
-        \     "template": s:template_for('view', 'View')
+        \  "lib/*.ex": {
+        \    "type": "module",
+        \    "alternate": "test/{}_test.exs"
         \  },
         \  "test/*_test.exs": {
-        \     "type": "test",
-        \     "alternate": "web/{}.ex",
-        \     "template": s:template_for('test', 'Test')
+        \    "type": "test",
+        \    "alternate": "lib/{}.ex"
         \  },
-        \  "web/templates/*.html.eex": {
-        \     "type": "template",
-        \     "alternate": "web/views/{dirname|basename}_view.ex"
+        \  "lib/**/controllers/*_controller.ex": {
+        \    "type": "controller",
+        \    "alternate": "test/{dirname}/controllers/{basename}_controller_test.exs",
+        \    "template": s:template_for('controller', 'Controller')
         \  },
-        \  "web/static/css/*.css": { "type": "stylesheet" },
-        \  "web/static/js/*.js": { "type": "javascript" },
-        \  "web/router.ex": { "type": "router" },
+        \  "lib/**/templates/*.html.eex": {
+        \    "type": "template",
+        \    "alternate": "lib/{dirname}/views/{basename}_view.ex"
+        \  },
+        \  "lib/**/views/*_view.ex": {
+        \    "type": "view",
+        \    "alternate": "test/{dirname}/views/{basename}_view_test.ex",
+        \    "template": s:template_for('view', 'View')
+        \  },
+        \  "lib/*/router.ex": {
+        \    "type": "router",
+        \    "alternate": "lib/{}/router.ex"
+        \  },
+        \  "README.md": { "type": "docs" },
+        \  "docs/*.md": { "type": "docs" },
+        \  "assets/css/*.css": { "type": "css" },
+        \  "assets/js/*.js": { "type": "js" },
         \  "config/*.exs": { "type": "config" },
-        \  "mix.exs":     { "type": "mix" },
-        \  "*": { "start": "mix phoenix.server",
-        \         "path": "web/**"
+        \  "config/config.exs": { "type": "config" },
+        \  "mix.exs": { "type": "mix" },
+        \  "priv/repo/seeds.exs": { "type": "seeds" },
+        \  "priv/repo/migrations/*.exs": {
+        \    "type": "migration",
+        \    "make": "mix ecto.migrate"
+        \  },
+        \  "*": {
+        \    "console": "iex -S mix",
+        \    "make": "mix compile",
+        \    "start": "mix phx.server"
         \  },
         \ }
+
 endfunction
 
 " }}}
